@@ -1,7 +1,7 @@
 from time import sleep
 
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 
 class FrontendWindow(QMainWindow):
@@ -15,6 +15,7 @@ class FrontendWindow(QMainWindow):
         super().__init__()
 
         self.autocad_controller = autocad_controller_object
+        self.selected_file_path = ''
 
         self.setGeometry(400, 200, 300, 300)
         self.setWindowTitle(name_of_app)
@@ -27,22 +28,28 @@ class FrontendWindow(QMainWindow):
         self.label1.move(25, 20)
         self.label1.setAlignment(QtCore.Qt.AlignCenter)  # Align text to the center
 
+        self.button_select_file = QtWidgets.QPushButton(self)
+        self.button_select_file.setText('Избери файл')
+        self.button_select_file.setMinimumWidth(150)
+        self.button_select_file.move(75, 60)
+        self.button_select_file.clicked.connect(self.select_file_click)
+
         self.button1 = QtWidgets.QPushButton(self)
         self.button1.setText('Стартирай AutoCAD')
         self.button1.setMinimumWidth(150)
-        self.button1.move(75, 70)
+        self.button1.move(75, 100)
         self.button1.clicked.connect(self.button1_click)
 
         self.button2 = QtWidgets.QPushButton(self)
         self.button2.setText('Затвори AutoCAD')
         self.button2.setMinimumWidth(150)
-        self.button2.move(75, 110)
+        self.button2.move(75, 140)
         self.button2.clicked.connect(self.button2_click)
 
         self.button9 = QtWidgets.QPushButton(self)
         self.button9.setText('Последователност')
         self.button9.setMinimumWidth(150)
-        self.button9.move(75, 150)
+        self.button9.move(75, 180)
         self.button9.clicked.connect(self.button9_click)
 
         self.label2 = QtWidgets.QLabel(self)
@@ -51,11 +58,23 @@ class FrontendWindow(QMainWindow):
         self.label2.move(25, 250)
         self.label2.setAlignment(QtCore.Qt.AlignCenter)  # Align text to the center
 
+    def select_file_click(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_dialog = QFileDialog()
+        file_dialog.setOptions(options)
+        file_dialog.setWindowTitle("Избери файл")
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog.setNameFilter("AutoCAD Drawing Files (*.dwg)")
+        if file_dialog.exec_() == QFileDialog.Accepted:
+            self.selected_file_path = file_dialog.selectedFiles()[0]
+            print(f"Selected file: {self.selected_file_path}")
+
     def button1_click(self):
         try:
             self.autocad_controller.start_autocad()
             sleep(5)
-            self.autocad_controller.open_document()
+            self.autocad_controller.open_document(self.selected_file_path)
             sleep(5)
             self.autocad_controller.get_active_document()
             sleep(5)
@@ -87,7 +106,7 @@ class FrontendWindow(QMainWindow):
 
     def button9_click(self):
         try:
-            self.autocad_controller.sequence()
+            self.autocad_controller.sequence(self.selected_file_path)
         except Exception as e:
             print(f"Error from `button9_click`: {e}")
 

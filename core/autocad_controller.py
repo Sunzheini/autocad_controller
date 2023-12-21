@@ -9,8 +9,7 @@ class AutocadController:
     A class to control AutoCAD
     :param project_path: path to the AutoCAD project
     """
-    def __init__(self, project_path):
-        self._project_path = project_path
+    def __init__(self):
         self._autocad_instance = None
         self._active_document = None
         self._active_document_name = None
@@ -29,14 +28,14 @@ class AutocadController:
             return message
         return 'success'
 
-    def open_document(self):
+    def open_document(self, path):
         """
         Open a document in AutoCAD
         :param path: path to the document
         :return: a string message with the result of the operation
         """
         try:
-            self._autocad_instance.app.Documents.Open(self._project_path)
+            self._autocad_instance.app.Documents.Open(path)
         except Exception as e:
             message = f"Error from `open_document`: {e}"
             return message
@@ -131,7 +130,7 @@ class AutocadController:
             return message
         return 'success'
 
-    def sequence(self):
+    def sequence(self, path):
         """
         Execute a sequence of operations
         :return: a string message with the result of the operation
@@ -139,7 +138,7 @@ class AutocadController:
         try:
             self.start_autocad()
             sleep(5)
-            self.open_document()
+            self.open_document(path)
             sleep(5)
             self.get_active_document()
             sleep(5)
