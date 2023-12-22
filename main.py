@@ -8,6 +8,9 @@ from frontend.pyqt_controller import FrontendWindow
 
 name_of_app = 'AutoCAD Controller'
 
+# To create an executable file, run the following command in the terminal:
+# pyinstaller --onefile --noconsole main.py
+
 
 if __name__ == '__main__':
     # 1. Create an instance of the AutoCAD controller
