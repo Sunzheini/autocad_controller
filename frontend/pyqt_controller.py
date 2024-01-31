@@ -11,17 +11,21 @@ class FrontendWindow(QMainWindow):
     self.setGeometry(200, 200, 300, 300)  # x, y, width, height of where the window is on the screen
     self.label1.move(40, 20)  # x, y of where the label is on the window
     """
-    def __init__(self, name_of_app, autocad_controller_object):
+    def __init__(
+            self,
+            name_of_app,
+            autocad_controller_object,
+    ):
         super().__init__()
 
-        # The controller object that will be used to call the methods
+        # Received objects and variables
         self._autocad_controller = autocad_controller_object
 
         # The path of the selected file
         self._selected_file_path = ''
 
         # Set the window properties
-        self.setGeometry(400, 200, 300, 300)
+        self.setGeometry(400, 200, 300, 400)    # x, y, width, height of where the window is on the screen
         self.setWindowTitle(name_of_app)
 
         # Call the method that will initialize the UI
@@ -34,8 +38,8 @@ class FrontendWindow(QMainWindow):
         self.label1 = QtWidgets.QLabel(self)
         self.label1.setText('Използвай бутоните за команди към AutoCAD')
         self.label1.setMinimumWidth(250)
-        self.label1.move(25, 20)
-        self.label1.setAlignment(QtCore.Qt.AlignCenter)  # Align text to the center
+        self.label1.move(25, 20)                            # x, y of where the label is on the window
+        self.label1.setAlignment(QtCore.Qt.AlignCenter)     # Align text to the center
 
         self.button_select_file = QtWidgets.QPushButton(self)
         self.button_select_file.setText('Избери файл')
@@ -61,10 +65,32 @@ class FrontendWindow(QMainWindow):
         self.button9.move(75, 180)
         self.button9.clicked.connect(self.sequence_click)
 
+        self. x_input = QtWidgets.QLineEdit(self)
+        self. x_input.setText('26443')
+        self. x_input.setMinimumWidth(50)
+        self. x_input.move(45, 220)
+
+        self. y_input = QtWidgets.QLineEdit(self)
+        self. y_input.setText('1942')
+        self. y_input.setMinimumWidth(50)
+        self. y_input.move(150, 220)
+
+        self.button_extract_text = QtWidgets.QPushButton(self)
+        self.button_extract_text.setText('Извлечи текст')
+        self.button_extract_text.setMinimumWidth(150)
+        self.button_extract_text.move(75, 260)
+        self.button_extract_text.clicked.connect(self.extract_text_click)
+
+        self.label_extracted_text = QtWidgets.QLabel(self)
+        self.label_extracted_text.setText('Резултат:')
+        self.label_extracted_text.setMinimumWidth(250)
+        self.label_extracted_text.move(25, 300)
+        self.label_extracted_text.setAlignment(QtCore.Qt.AlignCenter)
+
         self.label2 = QtWidgets.QLabel(self)
         self.label2.setText('Статус: очакване на команда')
         self.label2.setMinimumWidth(250)
-        self.label2.move(25, 250)
+        self.label2.move(25, 340)
         self.label2.setAlignment(QtCore.Qt.AlignCenter)  # Align text to the center
 
     def _update_status(self, status_text):
@@ -145,6 +171,23 @@ class FrontendWindow(QMainWindow):
 
         # update the status label
         function = self.button9.text()      # get the text attribute of the button
+        status_text = f'Статус: `{function}` изпълнено'
+        self._update_status(status_text)
+
+    def extract_text_click(self):
+        """
+        Extract text from the active document
+        """
+        try:
+            text = self._autocad_controller.extract_text_from_location(
+                int(self.x_input.text()), int(self.y_input.text())
+            )
+            self.label_extracted_text.setText(text)
+        except Exception as e:
+            print(f"Error from `button_extract_text_click`: {e}")
+
+        # update the status label
+        function = self.button_extract_text.text()      # get the text attribute of the button
         status_text = f'Статус: `{function}` изпълнено'
         self._update_status(status_text)
 

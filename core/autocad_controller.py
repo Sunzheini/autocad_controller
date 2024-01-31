@@ -14,6 +14,23 @@ class AutocadController:
         self._active_document = None
         self._active_document_name = None
 
+    def extract_text_from_location(self, x, y, tolerance=100.0):
+        """
+        Extract text from a specific location in AutoCAD drawing.
+        :param x: X coordinate of the location
+        :param y: Y coordinate of the location
+        :param tolerance: Tolerance for coordinate matching
+        :return: A string message with the extracted text or an error message
+        """
+        try:
+            # ToDo: Watch videos
+
+            # If no text found at the specified location
+            return f"No text found at location ({x}, {y})"
+        except Exception as e:
+            message = f"{e}"
+            return message
+
     def start_autocad(self, visible=True):
         """
         Start AutoCAD
