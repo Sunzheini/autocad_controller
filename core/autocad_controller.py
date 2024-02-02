@@ -2,6 +2,8 @@ import random
 from time import sleep
 
 from pyautocad import Autocad, APoint
+from pyautocad.contrib.tables import Table
+import pandas as pd
 
 
 class AutocadController:
@@ -13,23 +15,6 @@ class AutocadController:
         self._autocad_instance = None
         self._active_document = None
         self._active_document_name = None
-
-    def extract_text_from_location(self, x, y, tolerance=100.0):
-        """
-        Extract text from a specific location in AutoCAD drawing.
-        :param x: X coordinate of the location
-        :param y: Y coordinate of the location
-        :param tolerance: Tolerance for coordinate matching
-        :return: A string message with the extracted text or an error message
-        """
-        try:
-            # ToDo: Watch videos
-
-            # If no text found at the specified location
-            return f"No text found at location ({x}, {y})"
-        except Exception as e:
-            message = f"{e}"
-            return message
 
     def start_autocad(self, visible=True):
         """
@@ -144,6 +129,26 @@ class AutocadController:
             self._autocad_instance.app.Quit()
         except Exception as e:
             message = f"Error from `close_autocad`: {e}"
+            return message
+        return 'success'
+
+    def extract_text_to_excel(self):
+        """
+        WIP
+        """
+        excel = 'test.xlsx'
+        data = []
+
+        try:
+            for obj in self._autocad_instance.iter_objects('Text'):
+                x, y, z = obj.InsertionPoint
+                data.append([obj.TextString, x, y, z])
+
+            df = pd.DataFrame(data, columns=['Text', 'X', 'Y', 'Z'])
+            df.to_excel(excel, index=False)
+
+        except Exception as e:
+            message = f"{e}"
             return message
         return 'success'
 

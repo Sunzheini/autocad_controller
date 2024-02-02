@@ -11,7 +11,10 @@ drawing a circle at random location, saving the drawing, closing the drawing, an
 3. Close AutoCAD: close AutoCAD;
 4. Sequence: run a sequence of commands: start, open, draw a random circle, close, and quit with a delay
 of 5 seconds between each command.
-5. Extract text: extract text from a predefined text object in autocad located at x, y coordinates
-
+5. Extract text: extract all text content from text objects to excel file
 ## Status Text
 In Bulgarian language
+
+## Info
+# https://pyautocad.readthedocs.io/en/latest/index.html
+

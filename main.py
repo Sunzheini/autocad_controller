@@ -5,6 +5,9 @@ from core.autocad_controller import AutocadController
 from frontend.pyqt_controller import FrontendWindow
 
 
+# https://pyautocad.readthedocs.io/en/latest/index.html
+
+
 name_of_app = 'AutoCAD Controller'
 
 # To create an executable file, run the following command in the terminal:
